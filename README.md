@@ -61,3 +61,7 @@ asyncio.run(main())
 ## 免责
 
 仅用于验证码可用性研究与自有环境的合规测试，使用者自行承担后果。
+
+## 友情链接
+
+[![LINUX DO](https://img.shields.io/badge/LINUX_DO-友情链接-009e60?style=for-the-badge)](https://linux.do)
