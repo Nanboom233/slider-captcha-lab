@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 """shape_gap_diagnosis.py - 人工 vs 生成 TOP 特征的逐项分布对比。"""
 import json
+import os
 import sys
-
-import numpy as np
 
 if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8")
 
 sys.path.insert(0, ".")
-import os
 os.environ["TRACK_VARIANT"] = "feedback"
 from human_track import generate_drag
 from track_features import extract_features, events_to_track

@@ -66,18 +66,14 @@ def main():
     Xn = (X - mu) / sd
 
     from sklearn.ensemble import RandomForestClassifier
-    from sklearn.linear_model import LogisticRegression
-    from sklearn.model_selection import cross_val_score, LeaveOneOut
+    from sklearn.model_selection import StratifiedKFold, cross_val_score
 
     # 随机森林(主模型) — LOO 对人工样本
     rf = RandomForestClassifier(n_estimators=300, max_depth=6,
                                 class_weight="balanced", random_state=42)
     rf.fit(Xn, y)
-    # 人工样本 LOO CV(只对 label=1 的 30 条做留一,衡量"真人保持率")
     humans_idx = np.where(y == 1)[0]
     gen_idx = np.where(y == 0)[0]
-    # 简化 CV: 5-fold 分层
-    from sklearn.model_selection import StratifiedKFold
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
     acc = cross_val_score(rf, Xn, y, cv=cv, scoring="accuracy").mean()
     auc = cross_val_score(rf, Xn, y, cv=cv, scoring="roc_auc").mean()
