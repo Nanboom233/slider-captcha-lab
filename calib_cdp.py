@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 """calib_cdp.py - CDP 场景 K 值标定探针。
 
-只做一件事: CDP 匀速拖 100px,读 piece.left,算 K = piece.left / 100。
-不注入完整验证答案,拿数据就停。输出建议的 K 回填值。
+只做一件事: 在你的目标站点触发滑块后, CDP 匀速拖 100px, 读 piece.left,
+拟合 piece.left 与鼠标位移的响应曲线(线性 K 或二次 A·m+B·m²)。
+不注入完整验证答案, 拿数据就停。输出的系数回填到 slider_cdp.py 的
+A_CDP / B_CDP。
+
+用法: 把 goto 的 URL 和「触发滑块」部分(填表/点提交)换成你自己的站点逻辑,
+其余不用动。
 """
 import asyncio
-import base64
 import json
-import os
 import random
 import sys
-import time
 
 if sys.platform == "win32":
     try:
@@ -18,16 +20,13 @@ if sys.platform == "win32":
     except Exception:
         pass
 
-os.environ["PROXY_MODE"] = "off"
-for k in ("HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy"):
-    os.environ.pop(k, None)
-
 sys.path.insert(0, ".")
 from playwright.async_api import async_playwright
-from common.browser import inject_stealth
 
-PROXY = {"server": "http://127.0.0.1:PROXY_PORT"}
-EMAIL = os.environ.get("SIGNUP_EMAIL", "probecheck8271@MAIL_DOMAIN")
+# 如需代理: {"server": "http://127.0.0.1:7890"}
+PROXY = None
+# 换成你触发滑块的页面
+TARGET_URL = "https://your-site-with-captcha.com"
 
 
 async def read_piece(page):
@@ -54,26 +53,14 @@ async def main():
         ctx = await browser.new_context(viewport={"width": 960, "height": 600},
                                         locale="en-US")
         page = await ctx.new_page()
-        await inject_stealth(ctx, page)
         cdp = await ctx.new_cdp_session(page)
 
-        print("[1] 填表触发滑块 ...")
-        await page.goto("https://DEMO_SITE/auth?action=signup", timeout=60000,
+        print("[1] 打开页面并触发滑块 ...")
+        await page.goto(TARGET_URL, timeout=60000,
                         wait_until="domcontentloaded")
-        try:
-            await page.locator("#splash-screen").first.wait_for(state="hidden", timeout=15000)
-        except Exception:
-            pass
         await page.wait_for_timeout(2500)
-        await page.locator('input[name="username"]').first.fill("probe_user", timeout=15000)
-        await page.locator('input[name="email"]').first.fill(EMAIL)
-        await page.locator('input[name="password"]').first.fill("ProbeTest123!x")
-        await page.locator('input[name="checkPassword"]').first.fill("ProbeTest123!x")
-        box = page.locator('span[role="checkbox"]').first
-        if await box.get_attribute("aria-checked") != "true":
-            await box.click()
-        await page.wait_for_timeout(1000)
-        await page.locator('button[type="submit"]:not([disabled])').first.click(timeout=10000)
+        # ↓↓↓ 换成你站点上触发滑块的流程(点击按钮/提交表单等) ↓↓↓
+        # await page.locator('button[type="submit"]').first.click()
         await page.locator("#aliyunCaptcha-sliding-slider").first.wait_for(
             state="visible", timeout=12000)
         await page.wait_for_timeout(1800)

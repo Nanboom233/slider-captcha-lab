@@ -58,7 +58,15 @@ asyncio.run(main())
 
 判定码：**T001** 通过 · **F001** 风控拦截 · **F015** 位置误差
 
-依赖：`pip install -r requirements.txt`（playwright / opencv / numpy / captcha-recognizer）
+## 安装
+
+```bash
+pip install -r requirements.txt
+playwright install chromium
+```
+
+- `captcha-recognizer` 提供 YOLO 缺口识别（自带模型权重）
+- 换站点时先用 `calib_cdp.py` 标定该站的位移响应系数（`slider_cdp.py` 顶部的 `A_CDP/B_CDP`）
 
 ## 免责
 

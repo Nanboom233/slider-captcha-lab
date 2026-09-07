@@ -2,3 +2,5 @@ playwright>=1.40
 opencv-python
 numpy
 captcha-recognizer
+scikit-learn
+matplotlib
