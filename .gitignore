@@ -1,0 +1,10 @@
+# 运行时数据 — 不提交
+human_drag_samples.json
+captcha_runs.jsonl
+shape_scorer.pkl
+shape_scorer.json
+__pycache__/
+*.pyc
+.venv/
+.idea/
+.vscode/
