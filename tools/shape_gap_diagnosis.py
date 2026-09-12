@@ -8,10 +8,10 @@ from pathlib import Path
 if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8")
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # 项目根，供 src 包导入
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))  # 包根，供 slider_captcha_lab 导入
 os.environ["TRACK_VARIANT"] = "feedback"
-from src.human_track import generate_drag
-from src.track_features import extract_features, events_to_track
+from slider_captcha_lab.human_track import generate_drag
+from slider_captcha_lab.track_features import extract_features, events_to_track
 
 humans = json.load(open("human_drag_samples.json", encoding="utf-8"))
 h_rows = [extract_features(events_to_track(h.get("events") or []))

@@ -9,7 +9,7 @@
 </a>
 # Slider Captcha Lab
 
-阿里云滑块验证码（AliyunCaptcha）自动求解：YOLO 识别缺口 + 真人形态轨迹生成 + CDP 事件注入。
+阿里云/易盾滑块验证码自动求解：YOLO 识别缺口 + 真人形态轨迹生成 + CDP 事件注入。
 
 ## 效果
 
@@ -29,7 +29,7 @@ AUC=1.000 完美可分——教科书式的平滑曲线全是机器指纹：
 | 松手前微动作 | 0 | 0.25（画蛇添足） |
 
 真人形态是「**慢逼近 → 谷底犹豫 → 末端甩鞭 → 收尾**」，
-本生成器按此重构（细节见 [docs/轨迹形态理论.md](docs/轨迹形态理论.md) 与 `src/human_track.py` 注释）。
+本生成器按此重构（细节见 [docs/轨迹形态理论.md](docs/轨迹形态理论.md) 与 `src/slider_captcha_lab/human_track.py` 注释）。
 
 ![真人 vs 平滑曲线机器人 速度-进度对比](docs/speed_profile.png)
 
@@ -39,7 +39,7 @@ AUC=1.000 完美可分——教科书式的平滑曲线全是机器指纹：
 import asyncio
 from playwright.async_api import async_playwright
 
-from src.slider_cdp import solve, install_verdict_hook
+from slider_captcha_lab.slider_cdp import solve, install_verdict_hook
 
 async def main():
     async with async_playwright() as p:
@@ -60,7 +60,8 @@ asyncio.run(main())
 | 层 | 文件 | 说明 |
 |---|---|---|
 | **（根）** | `main.py` | 使用示例入口（`python main.py` 运行易盾示例） |
-| **src/** | `slider_cdp.py` | 阿里云求解库：识别 → 轨迹 → 注入 → 判定 |
+| | `pyproject.toml` | 打包配置（hatchling，src-layout） |
+| **src/slider_captcha_lab/** | `slider_cdp.py` | 阿里云求解库：识别 → 轨迹 → 注入 → 判定 |
 | | `slider_cdp_yidun.py` | 易盾求解库（embed 模式：`.yidun_slider` 按钮 + `.yidun_bg-img` 缺口图） |
 | | `human_track.py` | 轨迹生成器（核心算法） |
 | | `track_features.py` | 59 维形态特征 |

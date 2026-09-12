@@ -8,7 +8,7 @@
   slider_cdp_yidun 网易易盾滑块求解器（Netease Yidun）
 
 用法（在项目根目录运行，见根目录 main.py）：
-    from src.slider_cdp_yidun import solve
+    from slider_captcha_lab.slider_cdp_yidun import solve
 """
 
 __all__ = [

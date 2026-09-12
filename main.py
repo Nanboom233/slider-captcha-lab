@@ -4,16 +4,21 @@
 在项目根目录运行：
     python main.py
 
-求解入口（核心库在 src/ 包内）：
-  - src.slider_cdp_yidun.solve(page)       易盾：embed 模式，传入页面即可
-  - src.slider_cdp.solve(ctx, page, cdp)   阿里云：需 ctx + page + cdp 三件套
+求解入口（核心库在 src/slider_captcha_lab/ 包内）：
+  - slider_captcha_lab.slider_cdp_yidun.solve(page)     易盾：embed 模式，传入页面即可
+  - slider_captcha_lab.slider_cdp.solve(ctx, page, cdp) 阿里云：需三件套
 """
 import asyncio
+import sys
+from pathlib import Path
+
+# 未安装本包、直接从源码运行时，使 slider_captcha_lab 可导入
+sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 
 from playwright.async_api import async_playwright
 
-from src.slider_cdp import install_verdict_hook, solve as solve_aliyun
-from src.slider_cdp_yidun import solve as solve_yidun
+from slider_captcha_lab.slider_cdp import install_verdict_hook, solve as solve_aliyun
+from slider_captcha_lab.slider_cdp_yidun import solve as solve_yidun
 
 
 async def demo_yidun(url="https://your-site-with-captcha.com"):
@@ -40,7 +45,7 @@ async def demo_yidun(url="https://your-site-with-captcha.com"):
 async def demo_aliyun(url="https://your-site-with-captcha.com"):
     """阿里云滑块求解模板：需先在页面上触发滑块弹出，再调用 solve()。
 
-    换站点时先用 tools/calib_cdp.py 标定 A_CDP/B_CDP，回填 src/slider_cdp.py 顶部。
+    换站点时先用 tools/calib_cdp.py 标定 A_CDP/B_CDP，回填 src/slider_captcha_lab/slider_cdp.py 顶部。
     """
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=False)

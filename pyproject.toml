@@ -1,0 +1,24 @@
+[project]
+name = "slider-captcha-lab"
+version = "0.2.0"
+description = "滑块验证码实验场：人形轨迹 / YOLO 缺口识别 / CDP 拖动注入"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "playwright>=1.40",
+    "opencv-python>=4.10",
+    "numpy>=1.26",
+    "captcha-recognizer>=1.0",
+]
+
+[project.optional-dependencies]
+# 仅 tools/ 下的分析脚本需要；库本体不依赖
+tools = ["scikit-learn", "matplotlib"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# 标准 src-layout：包目录名即可导入名，无需 sources 重映射
+[tool.hatch.build.targets.wheel]
+packages = ["src/slider_captcha_lab"]
