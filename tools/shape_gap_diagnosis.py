@@ -3,14 +3,15 @@
 import json
 import os
 import sys
+from pathlib import Path
 
 if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8")
 
-sys.path.insert(0, ".")
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # 项目根，供 src 包导入
 os.environ["TRACK_VARIANT"] = "feedback"
-from human_track import generate_drag
-from track_features import extract_features, events_to_track
+from src.human_track import generate_drag
+from src.track_features import extract_features, events_to_track
 
 humans = json.load(open("human_drag_samples.json", encoding="utf-8"))
 h_rows = [extract_features(events_to_track(h.get("events") or []))

@@ -20,7 +20,6 @@ if sys.platform == "win32":
     except Exception:
         pass
 
-sys.path.insert(0, ".")
 from playwright.async_api import async_playwright
 
 # 如需代理: {"server": "http://127.0.0.1:7890"}

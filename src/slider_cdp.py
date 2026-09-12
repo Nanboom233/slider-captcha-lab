@@ -17,9 +17,8 @@ import time
 
 import cv2
 import numpy as np
-from playwright.async_api import async_playwright
 
-from human_track import generate_drag
+from .human_track import generate_drag
 
 # ---- CDP 场景二次响应模型(标定方法见 calib_cdp.py) ----
 # piece.left = A_CDP * m + B_CDP * m^2
@@ -225,21 +224,3 @@ async def solve(ctx, page, cdp, meta=None):
         "actual_error": -err, "verdict": verdict, "passed": bool(passed),
     })
     return bool(passed), meta
-
-
-# ---------------- 演示: 打开任意图床页触发滑块并求解 ----------------
-async def demo(url="https://example.com/"):
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False)
-        ctx = await browser.new_context()
-        page = await ctx.new_page()
-        await page.goto(url, wait_until="domcontentloaded")
-        cdp = await ctx.new_cdp_session(page)
-        await install_verdict_hook(page)
-        # 在这里触发你的滑块(点击按钮/提交表单...)
-        # passed, meta = await solve(ctx, page, cdp)
-        await browser.close()
-
-
-if __name__ == "__main__":
-    asyncio.run(demo())

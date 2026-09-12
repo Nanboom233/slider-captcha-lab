@@ -10,15 +10,16 @@
 """
 import json
 import sys
+from pathlib import Path
 
 import numpy as np
 
 if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8")
 
-sys.path.insert(0, ".")
-from human_track import generate_drag
-from track_features import extract_features, events_to_track
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # 项目根，供 src 包导入
+from src.human_track import generate_drag
+from src.track_features import extract_features, events_to_track
 
 MODEL_FILE = "shape_scorer.json"
 

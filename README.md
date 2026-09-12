@@ -29,16 +29,17 @@ AUC=1.000 完美可分——教科书式的平滑曲线全是机器指纹：
 | 松手前微动作 | 0 | 0.25（画蛇添足） |
 
 真人形态是「**慢逼近 → 谷底犹豫 → 末端甩鞭 → 收尾**」，
-本生成器按此重构（细节见 [docs/轨迹形态理论.md](docs/轨迹形态理论.md) 与 `human_track.py` 注释）。
+本生成器按此重构（细节见 [docs/轨迹形态理论.md](docs/轨迹形态理论.md) 与 `src/human_track.py` 注释）。
 
-![真人 vs 平滑曲线机器人 速度-进度对比](speed_profile.png)
+![真人 vs 平滑曲线机器人 速度-进度对比](docs/speed_profile.png)
 
 ## 使用
 
 ```python
 import asyncio
 from playwright.async_api import async_playwright
-from slider_cdp import solve, install_verdict_hook
+
+from src.slider_cdp import solve, install_verdict_hook
 
 async def main():
     async with async_playwright() as p:
@@ -54,16 +55,21 @@ async def main():
 asyncio.run(main())
 ```
 
-## 文件
+## 目录结构
 
-| 文件 | 说明 |
-|---|---|
-| `slider_cdp.py` | 求解库：识别 → 轨迹 → 注入 → 判定 |
-| `human_track.py` | 轨迹生成器（核心算法） |
-| `track_features.py` | 59 维形态特征 |
-| `record_human_drag.py` | 真人轨迹采集 |
-| `train_shape_scorer.py` / `shape_gap_diagnosis.py` | 人/机分类器诊断闭环 |
-| `calib_cdp.py` | 位移响应模型标定（`piece.left = A·m + B·m²`） |
+| 层 | 文件 | 说明 |
+|---|---|---|
+| **（根）** | `main.py` | 使用示例入口（`python main.py` 运行易盾示例） |
+| **src/** | `slider_cdp.py` | 阿里云求解库：识别 → 轨迹 → 注入 → 判定 |
+| | `slider_cdp_yidun.py` | 易盾求解库（embed 模式：`.yidun_slider` 按钮 + `.yidun_bg-img` 缺口图） |
+| | `human_track.py` | 轨迹生成器（核心算法） |
+| | `track_features.py` | 59 维形态特征 |
+| | `scipy_stats_free.py` | 无 scipy 依赖的统计工具 |
+| **tools/** | `calib_cdp.py` / `calib_cdp_yidun.py` | 位移响应模型标定（阿里云 / 易盾） |
+| | `record_human_drag.py` | 真人轨迹采集 |
+| | `train_shape_scorer.py` / `shape_gap_diagnosis.py` | 人/机分类器诊断闭环 |
+| | `verify_gate_assumption.py` | 闸门前提复核 |
+| **docs/** | `轨迹形态理论.md` / `分类器与特征工程.md` | 原理说明 |
 
 判定码：**T001** 通过 · **F001** 风控拦截 · **F015** 位置误差
 
@@ -75,7 +81,7 @@ playwright install chromium
 ```
 
 - `captcha-recognizer` 提供 YOLO 缺口识别（自带模型权重）
-- 换站点时先用 `calib_cdp.py` 标定该站的位移响应系数（`slider_cdp.py` 顶部的 `A_CDP/B_CDP`）
+- 换站点时先用 `tools/calib_cdp.py`（阿里云）或 `tools/calib_cdp_yidun.py`（易盾）标定该站的位移响应系数
 
 ## 免责
 
