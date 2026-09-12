@@ -1,3 +1,12 @@
+## Star History
+
+<a href="https://www.star-history.com/?repos=kangleyao%2Fslider-captcha-lab&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=kangleyao/slider-captcha-lab&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=kangleyao/slider-captcha-lab&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=kangleyao/slider-captcha-lab&type=date&legend=top-left" />
+ </picture>
+</a>
 # Slider Captcha Lab
 
 阿里云滑块验证码（AliyunCaptcha）自动求解：YOLO 识别缺口 + 真人形态轨迹生成 + CDP 事件注入。
